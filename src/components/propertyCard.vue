@@ -1,7 +1,12 @@
 
 <template>
-    <article id="card-propertyCard" @click="handleClick(cardData.id)">
-       <img :src="'img/properties/'+cardData.cover" class="property-cover" alt=""/>
+    <article id="card-propertyCard">
+       <img 
+            @click="handleClick(cardData.id)"
+            :src="'img/properties/'+cardData.cover" 
+            class="property-cover" 
+            alt=""
+        />
 
         <div class="property-details">
             <p class="property-title"> 

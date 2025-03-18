@@ -1,69 +1,122 @@
 
 <template>
     <section id="propery-overview">
-        <button id="close-overview-bnt">x</button>
-        <div id="overview-container">
-            <img src="img/defaults/property_default_image.jpg" id="zoom-image" alt=""/>
-                <div id="small-images-container">
-                    <img src="" class="small-image" alt=""/>
-                    <img src="" class="small-image" alt=""/>
-                    <img src="" class="small-image" alt=""/>
-                    <img src="" class="small-image" alt=""/>
-                </div>
-          
-            <div id="porperty-about">
-                <div>
-                    <h1>Casa para vender</h1>
-                    <p id="property-location">Petrolina-PE</p>
-                </div>
-                <span id="price">R$ 56, 9000</span>
-                <span id="contract-type">Aluguel</span>
-                <h1>Descrição</h1>
-                <p id="description"></p>
-                <h3>Caracteristicas</h3>
-                <ul class="property-amenities">
-                    <li class="amenities" title="Salas">
-                        <img src="img/icons/room.svg" alt="" class="amenitie-icon"/>
-                        <p class="amenitie-qtd">5</p>
-                    </li>
-                </ul>
+        <button id="close-overview-bnt" @click="emit('close_overview',0)">x</button>
+        <div id="left-container">
+            <img :src="'img/properties/'+cardData.cover" id="zoom-image" alt=""/>
+            <div id="small-images-container">
+                <img 
+                    v-for="(img,index) in cardData.images" 
+                    :key="index"
+                    :src="'img/properties/'+img" class="small-image" alt=""
+                    @click="upToZoom(img)"
+                />
             </div>
-            <div id="contact-container">
-                <div id="user-infos">
-                    <img src="" alt="" id="user-profile"/>
-                    <p>
-                        <span>User-name</span>                        
-                        <span>User-UUID</span>                        
-                    </p>
-                </div>
-                <button>Mandar mensagem</button>
-            </div>
+        </div>
+        
+        <div id="right-container">
+            <h1>
+                {{cardData.title}}
+                <p id="property-location">{{cardData.address}}</p>
+                R$ {{cardData.price}}
+            </h1>
+            <h2>Decrição</h2>
+            <p id="description">
+                {{cardData.description}}
+            </p>
+            <h3>Caracteristicas</h3>
+            <ul class="property-amenities">
+                 <li class="amenities" title="Salas">
+                <img src="img/icons/room.svg" alt="" class="amenitie-icon"/>
+                <p class="amenitie-qtd">{{cardData.rooms}}</p>
+            </li>
+            <li class="amenities" title="Banheiros">
+                <img src="img/icons/bathroom.svg" alt="" class="amenitie-icon"/>
+                <p class="amenitie-qtd">{{cardData.bathrooms}}</p>
+            </li>
+            <li class="amenities" title="Quartos">
+                <img src="img/icons/bedroom.svg" alt="" class="amenitie-icon"/>
+                <p class="amenitie-qtd">{{cardData.bedrooms}}</p>
+            </li>
+            <li class="amenities" title="Cozinhas">
+                <img src="img/icons/kitchen.svg" alt="" class="amenitie-icon"/>
+                <p class="amenitie-qtd">{{cardData.kitchens}}</p>
+            </li>
+            </ul>
         </div>
     </section>
 </template>
+
+<script setup>
+    const emit = defineEmits(["close_overview"]);
+    const prop = defineProps({cardData:Object});
+
+    function upToZoom(imgUrl) {
+        document.getElementById("zoom-image").src = `img/properties/${imgUrl}`
+    }
+</script>
+
 
 <style scoped>
 
 #propery-overview {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    background-color: rgb(255, 252, 252);
-    flex: 1;
+    position: relative;
+    width: 100%;
     margin: 10px 5px;
     padding: 4px 10px;
     border: 1px solid red;
-    border-radius: 10px;
+}
+
+#left-container, #right-container {
+    width: 50%;
+    background-color: rgb(255, 252, 252);
+    overflow: hidden;
+    padding: 10px;
 }
 
 #close-overview-bnt {
-    display: block;
-    width: 100%;
-    height: 20px;
+    position: absolute;
     background: none;
-    border: 1px solid red;
+    top: 0; left: 97%;
+    display: block;
+    width: 40px;
+    height: 40px;
     outline: none;
-    text-align: right;
+    border: none;
+    text-align: center;
+    cursor: pointer;
 }
+#zoom-image {display: block;width: 100%;}
+#small-images-container {
+    width: 100%;
+    display: grid;
+    overflow: auto;
+    grid-template-columns: repeat(4, 1fr);
+}
+    .small-image {
+        display: block;
+        width: 100%;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+.property-amenities {
+    display: flex;
+    width: 100%;
+    padding: 0 6px;
+    list-style: none;
+}
+
+.amenities {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    background-color: white;
+    border: 1px solid #000;
+    width: 70px;
+    padding: 2px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
 </style>
